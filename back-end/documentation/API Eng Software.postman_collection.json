@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "c42503eb-be43-43ba-9972-cddff44ff032",
+		"name": "API Eng Software",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhcHJpeHByaWNpbmciLCJpYXQiOjE1OTI5MzE2NjMsImV4cCI6MTU5MjkzNTI2M30.nJQDXivI31z3NqH6ku9OJeHJUHXSulMKwUSqznm_Y1Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"parameters\" :{\n        \"user_number\":\"00123456\"\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/v1/select_user_password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"v1",
+						"select_user_password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Select Vacancies",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhcHJpeHByaWNpbmciLCJpYXQiOjE1OTI5MzE2NjMsImV4cCI6MTU5MjkzNTI2M30.nJQDXivI31z3NqH6ku9OJeHJUHXSulMKwUSqznm_Y1Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"parameters\" :{\n        \"owner_registration_number\": \"00112233\",\n        \"areas\":[\"Engenharia de Software\", \"Inteligência Artificial\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/v1/select_vacancies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"v1",
+						"select_vacancies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Vacancy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhcHJpeHByaWNpbmciLCJpYXQiOjE1OTI5MzE2NjMsImV4cCI6MTU5MjkzNTI2M30.nJQDXivI31z3NqH6ku9OJeHJUHXSulMKwUSqznm_Y1Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"parameters\" :{\n        \"owner_registration_number\": \"00112233\",\n        \"name\": \"Bolsa Monitoria de Engenharia de Software\",\n        \"type\": \"Monitoria  \",\n        \"description\": \"Auxiliar professora e alunos de Engenharia de Software\",\n        \"areas\":[\"Engenharia de Software\"]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/v1/insert_vacancy",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"v1",
+						"insert_vacancy"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

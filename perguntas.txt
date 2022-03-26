@@ -1,0 +1,2 @@
+- Pode criar uma vaga sem ter área ou descrição?
+- Pode criar uma vaga
