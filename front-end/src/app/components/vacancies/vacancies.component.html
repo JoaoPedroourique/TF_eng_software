@@ -2,49 +2,105 @@
 <br class="top-spacing" />
 <section class="container-fluid form-section">
   <div class="row">
-    <div class="col-12 col-xl-8">
+    <div class="col-12">
       <mat-card class="main-cards">
-        <div class="row" >
-          <mat-title class="col-12">
-          </mat-title>
-          <mat-title-group>
-            <mat-title>
-            <h3 class="section-title" >Cadastro de Vagas</h3>
-            </mat-title>
-            <mat-subtitle class="row">
-              <p class="col" i18n>
-                Aqui é possível cadastrar novas vagas dentro do Sistema de Vagas 
+        <div class="row">
+          <mat-card-title-group>
+            <mat-card-title>
+              <h3 class="section-title">Cadastro de Vagas</h3>
+            </mat-card-title>
+            <mat-card-subtitle class="row">
+              <p class="col">
+                Aqui é possível cadastrar novas vagas dentro do Sistema de Vagas
               </p>
-            </mat-subtitle>
-          </mat-title-group>
+            </mat-card-subtitle>
+          </mat-card-title-group>
         </div>
-        
+        <form [formGroup]="form">
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="full-width" appearance="fill">
+                <label class="control-label required">
+                  Seu Número de Matrícula
+                </label>
+                <input matInput type="tel" inputmode="numeric" maxlength="8" formControlName="registration_number" />
+                <mat-error> Digite os 8 dígitos do seu número de matrícula (apenas números)</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="full-width" appearance="fill">
+                <label class="control-label required">
+                  Nome da Vaga
+                </label>
+                <input matInput formControlName="name" />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="full-width" appearance="fill">
+                <label class="control-label required">
+                  Tipo da Vaga
+                </label>
+                <input matInput formControlName="type" />
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field class="full-width" appearance="fill">
+                <label class="control-label required">
+                  Descrição da Vaga
+                </label>
+                <input matInput formControlName="description" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <p> Áreas de Interesse <span class="required-ast"> *</span>
+            </p>
+          </div>
+          <div class="row">
+            <div class=" col-3" *ngFor="let areaControl of getAreaOptions().controls; let i = index"
+              formArrayName="areas">
+              <mat-checkbox class="checkbox" [formControlName]="i" color="primary">
+                <span class="checkbox-text">
+                  {{ areaOptions[i]}}
+                </span>
+              </mat-checkbox>
+            </div>
+          </div>
+        </form>
       </mat-card>
 
       <div class="row justify-content-end">
-        <div class="col cancel-button-line">
-          <button
-            mat-raised-button
-            class="submit-button"
-          >
+        <div class="col-6 cancel-button-line">
+          <button mat-raised-button class="submit-button" (click)="resetForm()">
             Cancelar
           </button>
         </div>
-        <div class="col save-button-line">
-          <button
-            mat-raised-button
-            class="submit-button"
-          >
+        <div class="col-6 save-button-line">
+          <button mat-raised-button class="submit-button" [disabled]="!form.valid" [ngClass]="{disabled:!form.valid}"
+            (click)="saveForm()">
             Salvar
           </button>
         </div>
       </div>
     </div>
 
-    <div class="col-12 col-sm-4 setting-column">
+    <!-- <div class="col-12 col-sm-4 setting-column">
       <mat-card class="main-cards">
+        <mat-card-title-group>
+          <mat-card-title>
+            <h3 class="section-title">Vagas Cadastradas</h3>
+          </mat-card-title>
+          <mat-card-subtitle class="row">
+            <p class="col">
+              Aqui é possível ver as vagas que você já cadastrou
+            </p>
+          </mat-card-subtitle>
+        </mat-card-title-group>
       </mat-card>
-    </div>
+    </div> -->
   </div>
 </section>
 
@@ -53,13 +109,13 @@
 </ng-template>
 
 <ng-template #maxChar>
-  <span >Permitido no máximo 50 caracteres</span>
+  <span>Permitido no máximo 50 caracteres</span>
 </ng-template>
 
 <ng-template #alphanumeric>
-  <span >Permitido apenas caracteres alfanuméricos. Não permitidos espaços no início, no fim ou seguidos</span>
+  <span>Permitido apenas caracteres alfanuméricos. Não permitidos espaços no início, no fim ou seguidos</span>
 </ng-template>
 
 <ng-template #required>
-  <span >Campo obrigatório</span>
+  <span>Campo obrigatório</span>
 </ng-template>

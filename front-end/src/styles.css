@@ -1,1 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+    background-color: #e3e4e6;
+}
+
+.wrapper {
+    position: relative;
+    top: 0;
+    height: 100vh;
+    width: 98%;
+}
+
+.main-panel {
+    position: relative;
+    width: calc(100%-260px);
+    -webkit-transition: 0.33s, cubic-bezier(0.685,0.0473,0.346,1);
+    transition: 0.33s, cubic-bezier(0.685,0.0473,0.346,1); 
+}
+
+.main-panel > .content {
+    margin-top: 70px;
+    padding: 30px 15px;
+    min-height: calc(100vh - 123px);
+}
+
+.section-title {
+    font-style: normal;
+    font-weight: bold;
+    color: var(--primary);
+    margin-left: 15px;
+}
+
+
+.justify-content-end {
+    -webkit-box-pack: end !important;
+    -ms-flex-pack: end !important;
+    justify-content: end !important;
+}
+
+p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    color: #251916
+}

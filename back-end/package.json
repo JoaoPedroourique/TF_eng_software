@@ -1,7 +1,7 @@
 {
-  "name": "api_spotify",
+  "name": "api_vacancies_system",
   "version": "1.0.0",
-  "description": "Api to export data from a spotify model database",
+  "description": "Api to interact with a vacancies_system' database",
   "main": "server.js",
   "scripts": {
     "serve": "node server.js",

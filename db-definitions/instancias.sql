@@ -65,8 +65,8 @@ INSERT INTO vacancies(owner_registration_number, occupant_registration_number, n
  VALUES ('00112233','00123456', 'Bolsa de IC - Engenharia de Software', 'Estudar padrões de Arquitetura', 'Bolsa IC');
 
 -- vacancy_areas
-INSERT INTO vacancy_areas VALUES (2, 'Engenharia de Software');
-INSERT INTO vacancy_areas VALUES (2, 'Inteligência Artificial');
+INSERT INTO vacancy_areas VALUES (1, 'Engenharia de Software');
+INSERT INTO vacancy_areas VALUES (1, 'Inteligência Artificial');
 
 -- user_interests
 INSERT INTO user_interests VALUES ('00123456', 'Engenharia de Software');

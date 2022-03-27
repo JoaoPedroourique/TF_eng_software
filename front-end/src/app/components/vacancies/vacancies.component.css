@@ -6,13 +6,6 @@
   margin-left: auto;
 }
 
-.section-title {
-  font-style: normal;
-  font-weight: bold;
-  color: var(--primary);
-  margin-left: 15px;
-}
-
 .form-section {
   margin-top: 15px;
   margin-left: 1vw;
@@ -22,6 +15,7 @@
   padding: 1.5rem;
   margin-bottom: 1.5rem;
 }
+
 
 .save-button-line {
   display: flex;
@@ -37,8 +31,11 @@
 
 .submit-button {
   background-color: #371511;
+  border-radius: 6px;
   color: white;
   text-transform: uppercase;
+  min-width: 110px;
+  min-height: 45px;
 }
 
 
@@ -47,7 +44,7 @@
   font-weight: normal;
   font-size: 14px;
   line-height: 16px;
-  color: #4e4e4e;
+  color: #251916;
 }
 
 .control-label.required:after {
@@ -56,6 +53,10 @@
   position: absolute;
   margin-left: 5px;
   top: 7px;
+}
+
+.required-ast {
+  color: #d00;
 }
 
 .add-remove-wrapper {
@@ -73,6 +74,15 @@
 
 .edit-icon {
   margin-right: 15px;
+}
+
+.full-width {
+  width: 100%;
+  margin: 10px
+}
+
+.disabled {
+  opacity: 0.35
 }
 
 .icon {

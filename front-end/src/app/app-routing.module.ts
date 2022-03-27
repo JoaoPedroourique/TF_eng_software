@@ -6,9 +6,9 @@ import { VacanciesComponent } from 'src/app/components/vacancies/vacancies.compo
 
 const routes: Routes = [
   {
-  path:'vacancies',
-component: VacanciesComponent,
-pathMatch:'full'
+    path: 'vacancies',
+    component: VacanciesComponent,
+    pathMatch: 'full'
   }
 ];
 
