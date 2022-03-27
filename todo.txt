@@ -1,0 +1,16 @@
+Perguntas:
+
+- Pode criar uma vaga sem ter área? 
+    Atualmente, sistema não permite criar áreas novas -> presume-se que elas seriam criadas por um administrador da DB
+
+TODO:
+Back-end:
+- Colocar verificação que impede de inserir vaga se owner_registration_number não pertence a um professor
+
+
+Front-end:
+ - Criar modal que dá feedback ao usuário de que a vaga foi inserida com sucesso
+ - Criar tela de login (simular fluxo de autenticação com rota existente select_user_password -> como armazenar dados do usuário sem um authToken?)
+ - Tornar "tipo de bolsa" um seletor de opções -> quais devem ser?
+ - Tornar opções do checkbox de área dinâmicas -> precisa criar rota que faz select das áreas existentes antes
+ - Criar abstractArrayFetcher pra fazer o fetch  de qlqr coisa e extender ele no vacancies-service pra poder fazer o fetch das vagas existentes
