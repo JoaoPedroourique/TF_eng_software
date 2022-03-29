@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Observable, of, lastValueFrom } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { lastValueFrom } from 'rxjs';
 
 const BACKEND_URL = 'http://localhost:5000/v1'
 
@@ -18,7 +17,7 @@ export class VacanciesService {
   constructor(
     private http: HttpClient) { }
 
-  public async saveVacancy(registration_number: string, name: string, type: string, description: string, areas: Array<string>) {
+  public async saveVacancy(registration_number: string, name: string, type: string, description: string, areas: Array<string>, total_payment: number) {
     const url = `${BACKEND_URL}/insert_vacancy`
     try {
       const content: any = {
@@ -27,7 +26,8 @@ export class VacanciesService {
           name,
           type,
           description,
-          areas
+          areas,
+          total_payment
         }
       }
 

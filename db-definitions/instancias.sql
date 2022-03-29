@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS areas CASCADE;
 DROP TABLE IF EXISTS vacancies CASCADE;
 DROP TABLE IF EXISTS vacancy_areas CASCADE;
 DROP TABLE IF EXISTS user_interests CASCADE;
+DROP TABLE IF EXISTS user_vacancies_interests CASCADE;
 
 CREATE TABLE users	 
 ( 
@@ -10,6 +11,7 @@ CREATE TABLE users
   email VARCHAR(30) NOT NULL,  
   password VARCHAR(24) NOT NULL,  
   name VARCHAR(50) NOT NULL,  
+  cv_link TEXT,  
   is_teacher BOOLEAN NOT NULL,
   CONSTRAINT pk_users PRIMARY KEY (registration_number)
 );
@@ -28,6 +30,7 @@ CREATE TABLE vacancies
   name VARCHAR(50) NOT NULL,  
   description TEXT NOT NULL,
   type VARCHAR(30) NOT NULL, 
+  total_payment NUMERIC, 
   FOREIGN KEY(owner_registration_number) REFERENCES users (registration_number) ON DELETE CASCADE,
   FOREIGN KEY(occupant_registration_number) REFERENCES users (registration_number) ON DELETE CASCADE
 );
@@ -50,11 +53,20 @@ CREATE TABLE user_interests
   FOREIGN KEY(area_name) REFERENCES areas (area_name) ON DELETE CASCADE
 );
 
+CREATE TABLE user_vacancies_interests
+( 
+  registration_number VARCHAR(8) NOT NULL,
+  vacancy_id INTEGER NOT NULL,
+  PRIMARY KEY (registration_number,vacancy_id),
+  FOREIGN KEY(registration_number) REFERENCES users (registration_number) ON DELETE CASCADE,
+  FOREIGN KEY(vacancy_id) REFERENCES vacancies (vacancy_id) ON DELETE CASCADE
+);
+
 -- Populando as tabelas
 
 -- users
-INSERT INTO users VALUES ('00123456', 'aluno@ufrgs.br','Teste123', 'João Rodrigues', false);
-INSERT INTO users VALUES ('00112233', 'professor@ufrgs.br','Teste123', 'Maria Silva', true);
+INSERT INTO users VALUES ('00123456', 'aluno@ufrgs.br','Teste123', 'João Rodrigues', null, false);
+INSERT INTO users VALUES ('00112233', 'professor@ufrgs.br','Teste123', 'Maria Silva', null, true);
 
 -- areas
 INSERT INTO areas VALUES ('Engenharia de Software');

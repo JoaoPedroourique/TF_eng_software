@@ -28,21 +28,22 @@ const INSERT_VACANCY = (params) => {
   const name = params.name;
   const type = params.type;
   const description = params.description;
+  const total_payment = params.total_payment || null;
 
   let insertQuery = `
-  INSERT INTO vacancies(owner_registration_number, name, description, type)
-  VALUES (%L, %L, %L, %L)
+  INSERT INTO vacancies(owner_registration_number, name, description, type, total_payment)
+  VALUES (%L, %L, %L, %L, %L)
   RETURNING vacancy_id
   `
 
-  return format(insertQuery, owner_registration_number, name, description, type)
+  return format(insertQuery, owner_registration_number, name, description, type, total_payment)
 }
 
 const INSERT_VACANCY_AREAS = (params) => {
   const vacancy_id = params.vacancy_id;
   const areas = params.areas;
   const rowsToInsert = areas.map((area) => {
-    return [vacancy_id,area]
+    return [vacancy_id, area]
   })
 
   let insertQuery = `
@@ -50,7 +51,7 @@ const INSERT_VACANCY_AREAS = (params) => {
   VALUES %L
   `
 
-  return format(insertQuery,rowsToInsert)
+  return format(insertQuery, rowsToInsert)
 }
 
 const SELECT_USER_PASSWORD = (params) => {
@@ -61,7 +62,7 @@ const SELECT_USER_PASSWORD = (params) => {
     WHERE registration_number = %L
   `;
 
-  return format(selectQuery,user_number);
+  return format(selectQuery, user_number);
 };
 
 module.exports = {

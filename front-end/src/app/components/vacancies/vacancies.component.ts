@@ -14,13 +14,13 @@ export class VacanciesComponent implements OnInit {
     name: this.fb.control('', [Validators.required]),
     description: this.fb.control('', [Validators.required]),
     type: this.fb.control('', [Validators.required]),
+    total_payment: this.fb.control('', Validators.pattern("^[0-9]*$")),
     areas: this.fb.array([], TsUtils.atLeastOne(Validators.requiredTrue)),
   });
   // TODO: make dynamic
   public areaOptions: Array<string> = ['Engenharia de Software', 'Inteligência Artificial'].sort()
 
-  constructor(private vacanciesService: VacanciesService, private fb: FormBuilder) {
-  }
+  constructor(private vacanciesService: VacanciesService, private fb: FormBuilder) { }
 
   ngOnInit(): void {
 
@@ -42,8 +42,7 @@ export class VacanciesComponent implements OnInit {
           selectedAreas.push(this.areaOptions[index])
         }
       })
-      console.log('a')
-      await this.vacanciesService.saveVacancy(this.form.get('registration_number').value, this.form.get('name').value, this.form.get('type').value, this.form.get('description').value, selectedAreas)
+      await this.vacanciesService.saveVacancy(this.form.get('registration_number').value, this.form.get('name').value, this.form.get('type').value, this.form.get('description').value, selectedAreas, this.form.get('total_payment').value)
       this.resetForm()
     } catch (err) {
       console.error('Error saving data: ', err)
