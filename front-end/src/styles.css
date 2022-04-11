@@ -41,8 +41,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
     justify-content: end !important;
 }
 
+.justify-content-center {
+    -webkit-box-pack: center !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+}
+
 p {
     margin-top: 1rem;
     margin-bottom: 1rem;
     color: #251916
+}
+
+.main-card {
+    margin: 1.5rem auto 1.5rem auto;
+    padding: 1.5 rem;
 }

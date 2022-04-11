@@ -11,13 +11,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    VacanciesComponent
+    VacanciesComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -25,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     NoopAnimationsModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,

@@ -57,7 +57,7 @@ const INSERT_VACANCY_AREAS = (params) => {
 const SELECT_USER_PASSWORD = (params) => {
   const user_number = params.user_number;
 
-  let selectQuery = `SELECT u.password
+  let selectQuery = `SELECT *
   FROM users u
     WHERE registration_number = %L
   `;
