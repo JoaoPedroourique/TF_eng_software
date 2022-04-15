@@ -23,6 +23,11 @@ const SELECT_VACANCIES = (params) => {
   return selectQuery;
 };
 
+const SELECT_VACANCY = (params) => {
+  const id = params.id;
+  return `SELECT * FROM vacancies WHERE vacancy_id=${id}`;
+};
+
 const INSERT_VACANCY = (params) => {
   const owner_registration_number = params.owner_registration_number;
   const name = params.name;
@@ -37,6 +42,11 @@ const INSERT_VACANCY = (params) => {
   `
 
   return format(insertQuery, owner_registration_number, name, description, type, total_payment)
+}
+
+const DELETE_VACANCY = (params) => {
+  const id = params.id;
+  return `DELETE FROM vacancies WHERE vacancy_id=${id}`;
 }
 
 const INSERT_VACANCY_AREAS = (params) => {
@@ -68,6 +78,8 @@ const SELECT_USER_PASSWORD = (params) => {
 module.exports = {
   SELECT_VACANCIES,
   SELECT_USER_PASSWORD,
+  SELECT_VACANCY,
   INSERT_VACANCY,
   INSERT_VACANCY_AREAS,
+  DELETE_VACANCY,
 };

@@ -4,13 +4,13 @@
   "description": "Api to interact with a vacancies_system' database",
   "main": "server.js",
   "scripts": {
-    "serve": "node server.js",
+    "serve": "nodemon ./server.js",
     "pack": "npx pack-zip"
   },
   "author": "Joao",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
@@ -25,5 +25,8 @@
     "pg-format": "^1.0.4",
     "sinon": "^9.0.2",
     "tape-async": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
