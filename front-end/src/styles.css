@@ -30,8 +30,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 .section-title {
     font-style: normal;
     font-weight: bold;
-    color: var(--primary);
+    color: #03182c;
     margin-left: 15px;
+    margin-bottom: 15px;
 }
 
 

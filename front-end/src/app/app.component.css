@@ -1,0 +1,43 @@
+.sidebar{
+    background-color:  #ddc68d;
+    height: 100vh;
+}
+
+.title-margin {
+    margin: 15px
+}
+
+a {
+    text-decoration: none;
+}
+
+.options {
+    height: 40px;
+    color:#03182c;
+    margin-left: 15px;
+    padding: 0;
+}
+
+.active {
+    background-color: white;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.wrapper {
+    height: 100vh;
+    width:  100vw;
+}
+
+.main-panel{
+    height: 98vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    overflow-y: scroll;
+}
+
+.login-panel {
+    overflow-y: hidden;
+}

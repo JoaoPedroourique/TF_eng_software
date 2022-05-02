@@ -1,7 +1,39 @@
-<div class="wrapper">
-  <div class="main-panel">
-    <br class="top-spacing">
-    <h2 class="section-title"> Sistema de Cadastro de vagas - Instituto de Informática UFRGS</h2>
-    <router-outlet></router-outlet>
+<div class="container-fluid no-padding" *ngIf="isLoggedIn(); else loginPage">
+  <div class="row wrapper">
+    <div class="col-2 sidebar">
+      <h3 class="section-title title-margin">Menu</h3>
+      <ul>
+        <li class="row" routerLinkActive="active">
+          <a routerLink="aa" class="w3-bar-item w3-button options ">Meu Perfil</a>
+        </li>
+        <li class="row" routerLinkActive="active">
+          <a routerLink="vacancies" class="w3-bar-item w3-button options">Buscar</a>
+        </li>
+        <li class="row" routerLinkActive="active">
+          <a routerLink="vacancies-insertion" class="w3-bar-item w3-button options">Registrar</a>
+        </li>
+      </ul>
+
+    </div>
+    <div class="col-10 main-panel">
+      <br>
+      <h2 class="section-title"> Sistema de Vagas - Instituto de Informática UFRGS</h2>
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>
+
+
+<ng-template #loginPage>
+  <div class="container-fluid no-padding">
+    <div class="row wrapper">
+      <div class="login-panel">
+        <br>
+        <h2 class="section-title"> Sistema de Vagas - Instituto de Informática UFRGS</h2>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">

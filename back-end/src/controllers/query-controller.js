@@ -10,6 +10,10 @@ const SELECT_PARAMS = {
     selectQuery: dbQueries.SELECT_VACANCIES,
     printString: 'Vagas Existentes',
   },
+  SELECT_AREAS: {
+    selectQuery: dbQueries.SELECT_AREAS,
+    printString: 'Áreas Existentes',
+  },
   SELECT_USER_PASSWORD: {
     selectQuery: dbQueries.SELECT_USER_PASSWORD,
     printString: 'Usuário logado',
@@ -25,11 +29,20 @@ const INSERT_PARAMS = {
     insertQuery: dbQueries.INSERT_VACANCY_AREAS,
     printString: 'Vaga cadastrada na Área',
   },
+  INSERT_VACANCY_INTEREST: {
+    insertQuery: dbQueries.INSERT_VACANCY_INTEREST,
+    printString: 'Cadastrar interesse de candidato em uma vaga',
+  },
 };
 
 // Functions redirecting to the exportData function by adding their respective dataTypes to body
 function redirectSelectVacancies(req, res, next) {
   req.body.dataType = 'SELECT_VACANCIES';
+  next();
+}
+
+function redirectSelectAreas(req, res, next) {
+  req.body.dataType = 'SELECT_AREAS';
   next();
 }
 
@@ -43,6 +56,11 @@ function redirectInsertVacancy(req, res, next) {
   next();
 }
 
+function redirectInsertVacancyInterest(req, res, next) {
+  req.body.dataType = 'INSERT_VACANCY_INTEREST';
+  next();
+}
+
 
 
 /**
@@ -51,7 +69,7 @@ function redirectInsertVacancy(req, res, next) {
  * @param {*} res
  */
 async function exportData(req, res) {
-  
+
   const exportParams = SELECT_PARAMS[req.body.dataType];
 
   try {
@@ -78,7 +96,7 @@ async function exportData(req, res) {
  * @param {*} res
  */
 async function exportVacancies(req, res) {
-  
+
   const exportParams = SELECT_PARAMS[req.body.dataType];
 
   try {
@@ -93,18 +111,19 @@ async function exportVacancies(req, res) {
 
     const rows = queryResult.rows
     const vacanciesMap = new Map()
-    rows.forEach(row =>{
-      if(vacanciesMap.has(row.vacancy_id)) {
+    rows.forEach(row => {
+      if (vacanciesMap.has(row.vacancy_id)) {
         vacanciesMap.get(row.vacancy_id).areas.push(row.area_name)
       } else {
         vacanciesMap.set(row.vacancy_id, {
           "vacancy_id": row.vacancy_id,
-            "owner_registration_number": row.owner_registration_number,
-            "occupant_registration_number": row.occupant_registration_number,
-            "name": row.name,
-            "description": row.description,
-            "type": row.type,
-            "areas": [row.area_name]
+          "owner_registration_number": row.owner_registration_number,
+          "occupant_registration_number": row.occupant_registration_number,
+          "name": row.name,
+          "description": row.description,
+          "type": row.type,
+          "areas": [row.area_name],
+          "total_payment": row.total_payment
         })
       }
     })
@@ -122,8 +141,8 @@ async function exportVacancies(req, res) {
  * @param {*} req
  * @param {*} res
  */
- async function insertData(req, res) {
-  
+async function insertData(req, res) {
+
   let insertParams = INSERT_PARAMS[req.body.dataType];
 
   try {
@@ -131,7 +150,7 @@ async function exportVacancies(req, res) {
 
     let queryResult = await authPool.query(query);
 
-    if(req.body.dataType === 'INSERT_VACANCY') {
+    if (req.body.dataType === 'INSERT_VACANCY') {
       insertParams = INSERT_PARAMS['INSERT_VACANCY_AREAS']
       req.body.parameters.vacancy_id = queryResult.rows[0].vacancy_id
       query = insertParams.insertQuery(req.body.parameters)
@@ -144,12 +163,14 @@ async function exportVacancies(req, res) {
     console.error(queryError);
     res.status(500).json(APIUtils.msgJson(500));
   }
- }
+}
 
 module.exports = {
   redirectSelectVacancies,
+  redirectSelectAreas,
   redirectSelectUserPassword,
   redirectInsertVacancy,
+  redirectInsertVacancyInterest,
   exportData,
   exportVacancies,
   insertData

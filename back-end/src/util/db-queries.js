@@ -23,6 +23,15 @@ const SELECT_VACANCIES = (params) => {
   return selectQuery;
 };
 
+const SELECT_AREAS = (params) => {
+
+  let selectQuery = `SELECT *
+  FROM areas 
+    `;
+
+  return selectQuery;
+};
+
 const INSERT_VACANCY = (params) => {
   const owner_registration_number = params.owner_registration_number;
   const name = params.name;
@@ -37,6 +46,18 @@ const INSERT_VACANCY = (params) => {
   `
 
   return format(insertQuery, owner_registration_number, name, description, type, total_payment)
+}
+
+const INSERT_VACANCY_INTEREST = (params) => {
+  const registration_number = params.registration_number;
+  const vacancy_id = params.vacancy_id;
+
+  let insertQuery = `
+  INSERT INTO user_vacancies_interests(registration_number, vacancy_id)
+  VALUES (%L, %L)
+  `
+
+  return format(insertQuery, registration_number, vacancy_id)
 }
 
 const INSERT_VACANCY_AREAS = (params) => {
@@ -67,7 +88,9 @@ const SELECT_USER_PASSWORD = (params) => {
 
 module.exports = {
   SELECT_VACANCIES,
+  SELECT_AREAS,
   SELECT_USER_PASSWORD,
   INSERT_VACANCY,
   INSERT_VACANCY_AREAS,
+  INSERT_VACANCY_INTEREST
 };

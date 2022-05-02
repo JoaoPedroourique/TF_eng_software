@@ -4,15 +4,15 @@
     font-size: 14px;
     line-height: 16px;
     color: #251916;
-  }
+}
   
-  .control-label.required:after {
+.control-label.required:after {
     color: #d00;
     content: '*';
     position: absolute;
     margin-left: 5px;
     top: 7px;
-  }
+}
 
   .submit-button {
     background-color: #371511;

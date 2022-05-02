@@ -2,11 +2,18 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { VacanciesComponent } from 'src/app/components/vacancies/vacancies.component'
+import { VacanciesInsertionComponent } from 'src/app/components/vacancies-insertion/vacancies-insertion.component'
 import { AuthGuard } from './auth.guard';
 import { LoginComponent } from './components/login/login.component';
+import { VacanciesComponent } from './components/vacancies/vacancies.component';
 
 const routes: Routes = [
+  {
+    path: 'vacancies-insertion',
+    component: VacanciesInsertionComponent,
+    canActivate: [AuthGuard],
+    pathMatch: 'full'
+  },
   {
     path: 'vacancies',
     component: VacanciesComponent,
@@ -21,8 +28,7 @@ const routes: Routes = [
   // default route
   {
     path: '',
-    component: VacanciesComponent,
-    canActivate: [AuthGuard],
+    redirectTo: 'vacancies',
     pathMatch: 'full'
   },
 ];
