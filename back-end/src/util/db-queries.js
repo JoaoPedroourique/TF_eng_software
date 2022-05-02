@@ -48,6 +48,15 @@ const INSERT_VACANCY = (params) => {
   return format(insertQuery, owner_registration_number, name, description, type, total_payment)
 }
 
+const SELECT_VACANCY_INTEREST = (params) => {
+
+  let selectQuery = `
+  SELECT * FROM user_vacancies_interests
+  `
+
+  return selectQuery
+}
+
 const INSERT_VACANCY_INTEREST = (params) => {
   const registration_number = params.registration_number;
   const vacancy_id = params.vacancy_id;
@@ -90,6 +99,7 @@ module.exports = {
   SELECT_VACANCIES,
   SELECT_AREAS,
   SELECT_USER_PASSWORD,
+  SELECT_VACANCY_INTEREST,
   INSERT_VACANCY,
   INSERT_VACANCY_AREAS,
   INSERT_VACANCY_INTEREST

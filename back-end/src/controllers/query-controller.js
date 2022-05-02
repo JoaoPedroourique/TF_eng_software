@@ -18,6 +18,10 @@ const SELECT_PARAMS = {
     selectQuery: dbQueries.SELECT_USER_PASSWORD,
     printString: 'Usuário logado',
   },
+  SELECT_VACANCY_INTEREST: {
+    selectQuery: dbQueries.SELECT_VACANCY_INTEREST,
+    printString: 'Interesses por vaga',
+  },
 };
 
 const INSERT_PARAMS = {
@@ -61,10 +65,14 @@ function redirectInsertVacancyInterest(req, res, next) {
   next();
 }
 
+function redirectSelectVacancyInterest(req, res, next) {
+  req.body.dataType = 'SELECT_VACANCY_INTEREST';
+  next();
+}
 
 
 /**
- * The main data export function (evaluate if will still be needed)
+ * The main data export function
  * @param {*} req
  * @param {*} res
  */
@@ -137,7 +145,47 @@ async function exportVacancies(req, res) {
 }
 
 /**
- * The main data export function
+ * The customized export vacancies interests function
+ * @param {*} req
+ * @param {*} res
+ */
+async function exportVacanciesInterest(req, res) {
+
+  const exportParams = SELECT_PARAMS[req.body.dataType];
+
+  try {
+    let query = exportParams.selectQuery(req.body.parameters);
+
+    let queryResult = await authPool.query(query);
+
+    if (queryResult.rowCount == 0) {
+      res.status(204).json(APIUtils.msgJson(204));
+      return;
+    }
+
+    const rows = queryResult.rows
+    const interestsMap = new Map()
+    rows.forEach(row => {
+      if (interestsMap.has(row.vacancy_id)) {
+        interestsMap.get(row.vacancy_id).registration_numbers.push(row.registration_number)
+      } else {
+        interestsMap.set(row.vacancy_id, {
+          "vacancy_id": row.vacancy_id,
+          "registration_numbers": [row.registration_number],
+        })
+      }
+    })
+
+    res.status(201).json({ result: Array.from(interestsMap.values()) });
+  } catch (queryError) {
+    console.log('Error while executing query in dataBase.');
+    console.error(queryError);
+    res.status(500).json(APIUtils.msgJson(500));
+  }
+}
+
+/**
+ * The main data insert function
  * @param {*} req
  * @param {*} res
  */
@@ -171,7 +219,9 @@ module.exports = {
   redirectSelectUserPassword,
   redirectInsertVacancy,
   redirectInsertVacancyInterest,
+  redirectSelectVacancyInterest,
   exportData,
   exportVacancies,
+  exportVacanciesInterest,
   insertData
 };
