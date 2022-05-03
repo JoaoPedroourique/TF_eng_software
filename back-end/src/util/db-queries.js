@@ -84,6 +84,58 @@ const INSERT_VACANCY_AREAS = (params) => {
   return format(insertQuery, rowsToInsert)
 }
 
+const UPDATE_USER = (params) => {
+  const registration_number = params.registration_number;
+  const name = params.name;
+  const password = params.password;
+  const email = params.email;
+  const cv_link = params.cv_link;
+
+  let updateQuery = `UPDATE users
+  SET
+    name = %L,
+    password = %L,
+    email = %L,
+    cv_link = %L
+  WHERE registration_number = %L
+  `;
+
+  return format(updateQuery, name, password, email, cv_link, registration_number)
+};
+
+const INSERT_USER_INTERESTS = (params) => {
+  const registration_number = params.registration_number;
+  const areas = params.area_interests;
+  const rowsToInsert = areas.map((area) => {
+    return [registration_number, area]
+  })
+
+  let insertQuery = `INSERT INTO user_interests(registration_number, area_name)
+  VALUES %L
+  `;
+  return format(insertQuery, rowsToInsert)
+};
+
+const DELETE_USER_INTERESTS = (params) => {
+  const registration_number = params.registration_number;
+  const areas = params.area_interests;
+
+  let deleteQuery = `DELETE FROM user_interests WHERE registration_number = %L
+   AND area_name in (%L)
+  `;
+
+  return format(deleteQuery, registration_number, areas)
+};
+
+const SELECT_USERS = (params) => {
+
+  let selectQuery = `SELECT u.*,i.area_name FROM users u 
+  LEFT JOIN user_interests i ON u.registration_number = i.registration_number
+  `;
+
+  return selectQuery
+};
+
 const SELECT_USER_PASSWORD = (params) => {
   const user_number = params.user_number;
 
@@ -98,9 +150,13 @@ const SELECT_USER_PASSWORD = (params) => {
 module.exports = {
   SELECT_VACANCIES,
   SELECT_AREAS,
+  SELECT_USERS,
   SELECT_USER_PASSWORD,
   SELECT_VACANCY_INTEREST,
+  UPDATE_USER,
   INSERT_VACANCY,
   INSERT_VACANCY_AREAS,
-  INSERT_VACANCY_INTEREST
+  INSERT_VACANCY_INTEREST,
+  INSERT_USER_INTERESTS,
+  DELETE_USER_INTERESTS
 };

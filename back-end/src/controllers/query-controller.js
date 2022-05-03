@@ -22,6 +22,10 @@ const SELECT_PARAMS = {
     selectQuery: dbQueries.SELECT_VACANCY_INTEREST,
     printString: 'Interesses por vaga',
   },
+  SELECT_USERS: {
+    selectQuery: dbQueries.SELECT_USERS,
+    printString: 'Usuários',
+  },
 };
 
 const INSERT_PARAMS = {
@@ -36,6 +40,31 @@ const INSERT_PARAMS = {
   INSERT_VACANCY_INTEREST: {
     insertQuery: dbQueries.INSERT_VACANCY_INTEREST,
     printString: 'Cadastrar interesse de candidato em uma vaga',
+  },
+  INSERT_USER_INTERESTS: {
+    insertQuery: dbQueries.INSERT_USER_INTERESTS,
+    printString: 'Cadastrar interesse de candidato em uma área',
+  },
+  UPDATE_USER: {
+    insertQuery: dbQueries.UPDATE_USER,
+    printString: 'Atualiza dados de um usuário existente',
+  },
+};
+
+const DELETE_PARAMS = {
+  DELETE_VACANCY: {
+    deleteQuery: dbQueries.DELETE_VACANCY,
+    printString: {
+      success: "Vaga removida com sucesso!",
+      notFound: "Vaga não encontrada!"
+    },
+  },
+  DELETE_USER_INTERESTS: {
+    deleteQuery: dbQueries.DELETE_USER_INTERESTS,
+    printString: {
+      success: "Vaga removida com sucesso!",
+      notFound: "Vaga não encontrada!"
+    },
   },
 };
 
@@ -65,10 +94,31 @@ function redirectInsertVacancyInterest(req, res, next) {
   next();
 }
 
+function redirectInsertUserInterest(req, res, next) {
+  req.body.dataType = 'INSERT_USER_INTERESTS';
+  next();
+}
+
+function redirectUpdateUser(req, res, next) {
+  req.body.dataType = 'UPDATE_USER';
+  next();
+}
+
 function redirectSelectVacancyInterest(req, res, next) {
   req.body.dataType = 'SELECT_VACANCY_INTEREST';
   next();
 }
+
+function redirectSelectUsers(req, res, next) {
+  req.body.dataType = 'SELECT_USERS';
+  next();
+}
+
+function redirectDeleteInterests(req, res, next) {
+  req.body.dataType = 'DELETE_USER_INTERESTS';
+  next();
+}
+
 
 
 /**
@@ -185,6 +235,51 @@ async function exportVacanciesInterest(req, res) {
 }
 
 /**
+ * The customized export users function
+ * @param {*} req
+ * @param {*} res
+ */
+async function exportsUsers(req, res) {
+
+  const exportParams = SELECT_PARAMS[req.body.dataType];
+
+  try {
+    let query = exportParams.selectQuery(req.body.parameters);
+
+    let queryResult = await authPool.query(query);
+
+    if (queryResult.rowCount == 0) {
+      res.status(204).json(APIUtils.msgJson(204));
+      return;
+    }
+
+    const rows = queryResult.rows
+    const usersMap = new Map()
+    rows.forEach(row => {
+      if (usersMap.has(row.registration_number)) {
+        usersMap.get(row.registration_number).area_interests.push(row.area_name)
+      } else {
+        usersMap.set(row.registration_number, {
+          "registration_number": row.registration_number,
+          "email": row.email,
+          "password": row.password,
+          "name": row.name,
+          "cv_link": row.cv_link,
+          "is_teacher": row.is_teacher,
+          "area_interests": [row.area_name],
+        })
+      }
+    })
+
+    res.status(201).json({ result: Array.from(usersMap.values()) });
+  } catch (queryError) {
+    console.log('Error while executing query in dataBase.');
+    console.error(queryError);
+    res.status(500).json(APIUtils.msgJson(500));
+  }
+}
+
+/**
  * The main data insert function
  * @param {*} req
  * @param {*} res
@@ -213,15 +308,51 @@ async function insertData(req, res) {
   }
 }
 
+/**
+ * function to delete data in the database
+ * @param {*} req
+ * @param {*} res
+ */
+async function deleteData(req, res) {
+
+  let deleteParams = DELETE_PARAMS[req.body.dataType];
+
+  try {
+    let query = deleteParams.deleteQuery(req.body.parameters);
+
+    let queryResult = await authPool.query(query);
+
+    let statusCode, message;
+    if (queryResult.rowCount) {
+      statusCode = 204
+      message = deleteParams.printString.success
+    } else {
+      statusCode = 404
+      message = deleteParams.printString.notFound
+    }
+    res.status(statusCode).json({ result: message });
+  } catch (queryError) {
+    console.log('Error while executing query in dataBase.');
+    console.error(queryError);
+    res.status(400).json(APIUtils.msgJson(400));
+  }
+}
+
 module.exports = {
   redirectSelectVacancies,
   redirectSelectAreas,
   redirectSelectUserPassword,
   redirectInsertVacancy,
   redirectInsertVacancyInterest,
+  redirectInsertUserInterest,
+  redirectUpdateUser,
   redirectSelectVacancyInterest,
+  redirectSelectUsers,
+  redirectDeleteInterests,
   exportData,
   exportVacancies,
   exportVacanciesInterest,
-  insertData
+  exportsUsers,
+  insertData,
+  deleteData
 };

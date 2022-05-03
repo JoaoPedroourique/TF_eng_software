@@ -6,11 +6,12 @@
         <div class="row">
           <mat-card-title-group>
             <mat-card-title>
-              <h3 class="section-title">Cadastro de Vagas</h3>
+              <h3 class="section-title"> Perfil</h3>
             </mat-card-title>
             <mat-card-subtitle class="row">
               <p class="col">
-                Aqui é possível cadastrar novas vagas dentro do Sistema de Vagas
+                Aqui é possível ver e editar seus dados pessoais
+                <ng-container *ngIf="isTeacher()">, assim como gerenciar as vagas que você cadastrou</ng-container>
               </p>
             </mat-card-subtitle>
           </mat-card-title-group>
@@ -20,10 +21,9 @@
             <div class="col-6">
               <mat-form-field class="full-width" appearance="fill">
                 <label class="control-label required">
-                  Seu Número de Matrícula
+                  Nome
                 </label>
-                <input matInput type="tel" inputmode="numeric" maxlength="8" formControlName="registration_number" />
-                <mat-error> Digite os 8 dígitos do seu número de matrícula (apenas números)</mat-error>
+                <input matInput formControlName="name" />
               </mat-form-field>
             </div>
           </div>
@@ -32,33 +32,25 @@
             <div class="col-6">
               <mat-form-field class="full-width" appearance="fill">
                 <label class="control-label required">
-                  Nome da Vaga
+                  Email
                 </label>
-                <input matInput formControlName="name" />
+                <input matInput formControlName="email" />
               </mat-form-field>
             </div>
             <div class="col-6">
               <mat-form-field class="full-width" appearance="fill">
                 <label class="control-label required">
-                  Tipo da Vaga
+                  Senha
                 </label>
-                <input matInput formControlName="type" />
-              </mat-form-field>
-            </div>
-            <div class="col-6">
-              <mat-form-field class="full-width" appearance="fill">
-                <label class="control-label required">
-                  Descrição da Vaga
-                </label>
-                <input matInput formControlName="description" />
+                <input matInput type="password" formControlName="password" />
               </mat-form-field>
             </div>
             <div class="col-6">
               <mat-form-field class="full-width" appearance="fill">
                 <label class="control-label">
-                  Remuneração
+                  Link do CV
                 </label>
-                <input matInput type="number" formControlName="total_payment" />
+                <input matInput formControlName="cv" />
               </mat-form-field>
             </div>
           </div>
@@ -86,13 +78,28 @@
           </button>
         </div>
         <div class="col-6 save-button-line">
-          <button mat-raised-button class="submit-button" [disabled]="!form.valid" [ngClass]="{disabled:!form.valid}"
-            (click)="saveForm()">
+          <button mat-raised-button class="submit-button" [disabled]="!form.valid || form.pristine"
+            [ngClass]="{disabled:!form.valid}" (click)="saveForm()">
             Salvar
           </button>
         </div>
       </div>
     </div>
+
+    <!-- <div class="col-12 col-sm-4 setting-column">
+      <mat-card class="main-cards">
+        <mat-card-title-group>
+          <mat-card-title>
+            <h3 class="section-title">Vagas Cadastradas</h3>
+          </mat-card-title>
+          <mat-card-subtitle class="row">
+            <p class="col">
+              Aqui é possível ver as vagas que você já cadastrou
+            </p>
+          </mat-card-subtitle>
+        </mat-card-title-group>
+      </mat-card>
+    </div> -->
   </div>
 </section>
 

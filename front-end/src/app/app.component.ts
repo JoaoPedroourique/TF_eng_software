@@ -13,4 +13,8 @@ export class AppComponent {
   public isLoggedIn() {
     return this.authService.isLoggedIn()
   }
+
+  public isTeacher() {
+    return this.authService.getCurrentUser() && this.authService.getCurrentUser().is_teacher
+  }
 }

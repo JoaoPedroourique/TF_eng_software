@@ -1,0 +1,153 @@
+.container-fluid {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.form-section {
+  margin-top: 15px;
+  margin-left: 1vw;
+}
+
+.main-cards {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+
+.save-button-line {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.cancel-button-line {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.submit-button {
+  background-color: #371511;
+  border-radius: 6px;
+  color: white;
+  text-transform: uppercase;
+  min-width: 110px;
+  min-height: 45px;
+}
+
+
+.control-label {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  color: #251916;
+}
+
+.control-label.required:after {
+  color: #d00;
+  content: '*';
+  position: absolute;
+  margin-left: 5px;
+  top: 7px;
+}
+
+.required-ast {
+  color: #d00;
+}
+
+.add-remove-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.subtitle {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: medium;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.edit-icon {
+  margin-right: 15px;
+}
+
+.full-width {
+  width: 100%;
+  margin: 10px
+}
+
+.disabled {
+  opacity: 0.35
+}
+
+.icon {
+  cursor: pointer;
+  float: right;
+}
+
+.example-icon {
+  margin: 5px;
+}
+
+.icon-box {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.no-border {
+  border: 0px;
+}
+
+.setting-column {
+  min-width: 320px;
+}
+
+.setting-card {
+  background-color: var(--blue02);
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.margin-setting-card {
+  background-color: var(--primary);
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.setting-card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.setting-name {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+}
+
+.setting-info {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 10px;
+}
+
+.margin-info {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+
+.setting-table {
+  font-size: 14px;
+}
+
+.setting-table ::ng-deep .mat-grid-tile-content {
+  justify-content: left !important;
+  white-space: nowrap;
+}

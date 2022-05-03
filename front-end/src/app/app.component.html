@@ -4,12 +4,12 @@
       <h3 class="section-title title-margin">Menu</h3>
       <ul>
         <li class="row" routerLinkActive="active">
-          <a routerLink="aa" class="w3-bar-item w3-button options ">Meu Perfil</a>
+          <a routerLink="profile" class="w3-bar-item w3-button options ">Meu Perfil</a>
         </li>
         <li class="row" routerLinkActive="active">
           <a routerLink="vacancies" class="w3-bar-item w3-button options">Buscar</a>
         </li>
-        <li class="row" routerLinkActive="active">
+        <li class="row" routerLinkActive="active" *ngIf="isTeacher()">
           <a routerLink="vacancies-insertion" class="w3-bar-item w3-button options">Registrar</a>
         </li>
       </ul>

@@ -34,8 +34,8 @@ export class VacanciesComponent implements OnInit {
 
     this.vacanciesService.getUpdateListener().subscribe({
       next: (res) => {
-        this.vacancies = res.data
-        this.vacanciesToDisplay = res.data
+        this.vacancies = res.data.filter(vacancy => !vacancy.occupant_registration_number)
+        this.vacanciesToDisplay = this.vacancies
       }
     })
 
