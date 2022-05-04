@@ -79,30 +79,231 @@
         </div>
         <div class="col-6 save-button-line">
           <button mat-raised-button class="submit-button" [disabled]="!form.valid || form.pristine"
-            [ngClass]="{disabled:!form.valid}" (click)="saveForm()">
+            [ngClass]="{disabled:!form.valid || form.pristine}" (click)="saveForm()">
             Salvar
           </button>
         </div>
       </div>
     </div>
 
-    <!-- <div class="col-12 col-sm-4 setting-column">
-      <mat-card class="main-cards">
+    <mat-card class="main-cards" *ngIf="isTeacher()">
+      <div class="row">
         <mat-card-title-group>
           <mat-card-title>
-            <h3 class="section-title">Vagas Cadastradas</h3>
+            <h3 class="section-title"> Vagas Cadastradas</h3>
           </mat-card-title>
           <mat-card-subtitle class="row">
             <p class="col">
-              Aqui é possível ver as vagas que você já cadastrou
+              Aqui é possível ver e editar as vagas que você cadastrou,
+              assim como os alunos que demonstraram interesse por elas
             </p>
           </mat-card-subtitle>
         </mat-card-title-group>
-      </mat-card>
-    </div> -->
+      </div>
+      <table mat-table [dataSource]="getCurrentTeacherVacancies()" class="vacancies-table"
+        *ngIf="currentTeacherVacancies.length > 0; else noVacancies">
+
+        <ng-container matColumnDef="Editar">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Editar</th>
+          <td mat-cell *matCellDef="let element">
+            <a (click)="onEditVacancy(element)">
+              <mat-icon class="material-icons icon">edit</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Excluir">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Excluir</th>
+          <td mat-cell *matCellDef="let element">
+            <a (click)="onDeleteVacancy(element)">
+              <mat-icon class="material-icons icon">delete_outline</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nº Candidatos">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Nº Candidatos</th>
+          <td mat-cell *matCellDef="let element"> {{ getInterestedNumbers(element) }} candidato(s)</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nome">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Nome</th>
+          <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Descrição">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Descrição</th>
+          <td mat-cell *matCellDef="let element"> {{ element.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Tipo">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Tipo</th>
+          <td mat-cell *matCellDef="let element"> {{ element.type }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Remuneração">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Remuneração</th>
+          <td mat-cell *matCellDef="let element"> {{ evaluatePayment(element) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Áreas">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Áreas</th>
+          <td mat-cell *matCellDef="let element"> {{ element.areas }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayCols"></tr>
+        <tr mat-row *matRowDef="let row; columns:displayCols"></tr>
+      </table>
+
+      <mat-card-title-group>
+        <mat-card-title>
+          <h3 class="section-title"> Editar</h3>
+        </mat-card-title>
+        <mat-card-subtitle class="row">
+          <p class="col">
+            Selecione Editar em uma vaga acima para editar seus dados
+          </p>
+        </mat-card-subtitle>
+      </mat-card-title-group>
+
+      <form [formGroup]="vacancyForm" *ngIf="currentTeacherVacancies.length > 0">
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <label class="control-label required">
+                Nome
+              </label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <label class="control-label required">
+                Tipo
+              </label>
+              <input matInput formControlName="type" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field class="full-width" appearance="fill">
+              <label class="control-label required">
+                Descrição
+              </label>
+              <input matInput formControlName="description" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field class="full-width" appearance="fill">
+              <label class="control-label">
+                Remuneração
+              </label>
+              <input matInput type="number" formControlName="total_payment" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <p> Áreas de Interesse <span class="required-ast"> *</span>
+          </p>
+        </div>
+        <div class="row">
+          <div class=" col-3" *ngFor="let areaControl of getAreaOptions().controls; let i = index"
+            formArrayName="areas">
+            <mat-checkbox class="checkbox" [formControlName]="i" color="primary">
+              <span class="checkbox-text">
+                {{ areaOptions[i]}}
+              </span>
+            </mat-checkbox>
+          </div>
+        </div>
+      </form>
+      <br>
+
+      <div class="row justify-content-end">
+        <div class="col-6 cancel-button-line">
+          <button mat-raised-button class="submit-button" (click)="resetVacancyForm()">
+            Cancelar
+          </button>
+        </div>
+        <div class="col-6 save-button-line">
+          <button mat-raised-button class="submit-button" [disabled]="!vacancyForm.valid || vacancyForm.pristine"
+            [ngClass]="{disabled:!vacancyForm.valid || vacancyForm.pristine}" (click)="saveVacancyForm()">
+            Salvar
+          </button>
+        </div>
+      </div>
+
+      <mat-card-title-group *ngIf="this.editingVacancy">
+        <mat-card-title>
+          <h3 class="section-title"> Atribuir alunos</h3>
+        </mat-card-title>
+        <mat-card-subtitle class="row" *ngIf="getInterestedUsers().length === 0">
+          <p class="col">
+            Quando houverem alunos interessados nesta vaga, você poderá escolher entre eles aqui
+          </p>
+        </mat-card-subtitle>
+      </mat-card-title-group>
+
+      <table mat-table [dataSource]="getInterestedUsers()" class="vacancies-table"
+        *ngIf="getInterestedUsers().length > 0">
+
+        <ng-container matColumnDef="Ocupante">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Ocupante</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-raised-button class="submit-button" (click)="onChooseStudent(element)"
+              *ngIf="!isOccupant(element)"> Atribuir</button>
+            <button mat-raised-button class="remove-button" (click)="onRemoveStudent(element)"
+              *ngIf="isOccupant(element)">Remover</button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nome">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Nome</th>
+          <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Email">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Email</th>
+          <td mat-cell *matCellDef="let element"> {{ element.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Link do CV">
+          <th mat-header-cell *matHeaderCellDef class="table-header"> Link do CV</th>
+          <td mat-cell *matCellDef="let element"> {{ element.cv_link }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="userDisplayCols"></tr>
+        <tr mat-row *matRowDef="let row; columns:userDisplayCols"></tr>
+      </table>
+
+
+    </mat-card>
   </div>
 </section>
 
 <ng-template #required>
   <span>Campo obrigatório</span>
+</ng-template>
+
+<ng-template #noVacancies>
+  <span>Você ainda não cadastrou nenhuma vaga</span>
+</ng-template>
+
+<ng-template #errorDialog>
+  <h2 matDialogTitle>Erro ao cadastrar</h2>
+  <p matDialogContent><em>Tente sair da aplicação e fazer login novamente</em></p>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose>OK</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #successDialog>
+  <h2 matDialogTitle>Sucesso</h2>
+  <p matDialogContent><em>Cadastro realizado com sucesso!</em></p>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose>OK</button>
+  </mat-dialog-actions>
 </ng-template>

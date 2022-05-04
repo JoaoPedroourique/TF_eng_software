@@ -38,6 +38,14 @@
   min-height: 45px;
 }
 
+.remove-button {
+  color: #371511;
+  border-radius: 6px;
+  background-color: white;
+  text-transform: uppercase;
+  min-width: 110px;
+  min-height: 45px;
+}
 
 .control-label {
   font-style: normal;
@@ -87,67 +95,27 @@
 
 .icon {
   cursor: pointer;
-  float: right;
 }
 
-.example-icon {
-  margin: 5px;
+.vacancies-table {
+  width: 100%;
+  margin-bottom: 40px;
+  background-color: #ddc68d;
 }
 
-.icon-box {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.no-border {
-  border: 0px;
-}
-
-.setting-column {
-  min-width: 320px;
-}
-
-.setting-card {
-  background-color: var(--blue02);
-  color: white;
-  margin-bottom: 1rem;
-}
-
-.margin-setting-card {
-  background-color: var(--primary);
-  color: white;
-  margin-bottom: 1rem;
-}
-
-.setting-card-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.setting-name {
-  font-style: normal;
+.table-header {
+  color: #03182c;
   font-weight: bold;
-  font-size: 14px;
-  color: white;
 }
 
-.setting-info {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 10px;
+.vacancies-table .mat-row:nth-child(even){
+  background-color: #dbe0ec;
 }
 
-.margin-info {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
+.vacancies-table .mat-row:nth-child(odd){
+  background-color: #FEFBE7;
 }
 
-.setting-table {
-  font-size: 14px;
-}
-
-.setting-table ::ng-deep .mat-grid-tile-content {
-  justify-content: left !important;
-  white-space: nowrap;
+.icon {
+  cursor: pointer;
 }

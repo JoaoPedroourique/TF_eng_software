@@ -6,18 +6,10 @@ const APIUtil = require('./API-util');
 
 // Queries
 const SELECT_VACANCIES = (params) => {
-  const owner_registration_number = params.owner_registration_number;
-  const occupant_registration_number = params.occupant_registration_number;
-  const type = params.type;
-  const areas = params.areas;
 
-  let selectQuery = `SELECT *
+  let selectQuery = `SELECT v.*,va.area_name
   FROM vacancies v
-  LEFT JOIN vacancy_areas va ON v.vacancy_id = va.vacancy_id WHERE 1=1
-  ${owner_registration_number ? `AND v.owner_registration_number = (${format(`%L`, owner_registration_number)})` : ''}
-  ${occupant_registration_number ? `AND v.occupant_registration_number = (${format(`%L`, occupant_registration_number)})` : ''}
-  ${type ? `AND v.type = (${format(`%L`, type)})` : ''}
-  ${areas ? `AND va.area_name IN (${format(`%L`, areas)})` : ''}
+  LEFT JOIN vacancy_areas va ON v.vacancy_id = va.vacancy_id
     `;
 
   return selectQuery;
@@ -32,20 +24,29 @@ const SELECT_AREAS = (params) => {
   return selectQuery;
 };
 
-const INSERT_VACANCY = (params) => {
+const UPSERT_VACANCY = (params) => {
+  const vacancy_id = params.vacancy_id;
   const owner_registration_number = params.owner_registration_number;
   const name = params.name;
   const type = params.type;
   const description = params.description;
   const total_payment = params.total_payment || null;
 
-  let insertQuery = `
+  let insertQuery = vacancy_id ? `
+  UPDATE vacancies SET 
+  owner_registration_number = %L,
+  name = %L,
+  description = %L,
+  type = %L,
+  total_payment = %L
+  WHERE vacancy_id = %L
+  `: `
   INSERT INTO vacancies(owner_registration_number, name, description, type, total_payment)
   VALUES (%L, %L, %L, %L, %L)
   RETURNING vacancy_id
   `
 
-  return format(insertQuery, owner_registration_number, name, description, type, total_payment)
+  return vacancy_id ? format(insertQuery, owner_registration_number, name, description, type, total_payment, vacancy_id) : format(insertQuery, owner_registration_number, name, description, type, total_payment)
 }
 
 const SELECT_VACANCY_INTEREST = (params) => {
@@ -79,6 +80,7 @@ const INSERT_VACANCY_AREAS = (params) => {
   let insertQuery = `
   INSERT INTO vacancy_areas(vacancy_id, area_name)
   VALUES %L
+  ON CONFLICT ON CONSTRAINT pk_vacancy_areas DO NOTHING
   `
 
   return format(insertQuery, rowsToInsert)
@@ -103,6 +105,23 @@ const UPDATE_USER = (params) => {
   return format(updateQuery, name, password, email, cv_link, registration_number)
 };
 
+const UPDATE_OCCUPANT = (params) => {
+  const vacancy_id = params.vacancy_id;
+  const occupant_registration_number = params.occupant_registration_number;
+
+  let updateQuery = occupant_registration_number ? `UPDATE vacancies
+  SET
+    occupant_registration_number = %L
+  WHERE vacancy_id = %L 
+  ` : `UPDATE vacancies
+  SET
+    occupant_registration_number = null
+  WHERE vacancy_id = %L 
+  `;
+
+  return occupant_registration_number ? format(updateQuery, occupant_registration_number, vacancy_id) : format(updateQuery, vacancy_id)
+};
+
 const INSERT_USER_INTERESTS = (params) => {
   const registration_number = params.registration_number;
   const areas = params.area_interests;
@@ -125,6 +144,26 @@ const DELETE_USER_INTERESTS = (params) => {
   `;
 
   return format(deleteQuery, registration_number, areas)
+};
+
+const DELETE_VACANCY_AREAS = (params) => {
+  const vacancy_id = params.vacancy_id;
+  const areas = params.areas;
+
+  let deleteQuery = `DELETE FROM vacancy_areas WHERE vacancy_id = %L
+   AND area_name in (%L)
+  `;
+
+  return format(deleteQuery, vacancy_id, areas)
+};
+
+const DELETE_VACANCY = (params) => {
+  const vacancy_id = params.vacancy_id;
+
+  let deleteQuery = `DELETE FROM vacancies WHERE vacancy_id = %L
+  `;
+
+  return format(deleteQuery, vacancy_id)
 };
 
 const SELECT_USERS = (params) => {
@@ -154,9 +193,12 @@ module.exports = {
   SELECT_USER_PASSWORD,
   SELECT_VACANCY_INTEREST,
   UPDATE_USER,
-  INSERT_VACANCY,
+  UPDATE_OCCUPANT,
+  UPSERT_VACANCY,
   INSERT_VACANCY_AREAS,
   INSERT_VACANCY_INTEREST,
   INSERT_USER_INTERESTS,
-  DELETE_USER_INTERESTS
+  DELETE_USER_INTERESTS,
+  DELETE_VACANCY,
+  DELETE_VACANCY_AREAS,
 };

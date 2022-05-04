@@ -29,8 +29,8 @@ const SELECT_PARAMS = {
 };
 
 const INSERT_PARAMS = {
-  INSERT_VACANCY: {
-    insertQuery: dbQueries.INSERT_VACANCY,
+  UPSERT_VACANCY: {
+    insertQuery: dbQueries.UPSERT_VACANCY,
     printString: 'Vaga Inserida com sucesso',
   },
   INSERT_VACANCY_AREAS: {
@@ -49,6 +49,10 @@ const INSERT_PARAMS = {
     insertQuery: dbQueries.UPDATE_USER,
     printString: 'Atualiza dados de um usuário existente',
   },
+  UPDATE_OCCUPANT: {
+    insertQuery: dbQueries.UPDATE_OCCUPANT,
+    printString: 'Atualiza aluno que ocupa uma vaga',
+  },
 };
 
 const DELETE_PARAMS = {
@@ -62,10 +66,17 @@ const DELETE_PARAMS = {
   DELETE_USER_INTERESTS: {
     deleteQuery: dbQueries.DELETE_USER_INTERESTS,
     printString: {
-      success: "Vaga removida com sucesso!",
-      notFound: "Vaga não encontrada!"
+      success: "Interesse removida com sucesso!",
+      notFound: "Interesse não encontrada!"
     },
   },
+  DELETE_VACANCY_AREAS: {
+    deleteQuery: dbQueries.DELETE_VACANCY_AREAS,
+    printString: {
+      success: "Area removida com sucesso!",
+      notFound: "Area não encontrada!"
+    },
+  }
 };
 
 // Functions redirecting to the exportData function by adding their respective dataTypes to body
@@ -84,8 +95,8 @@ function redirectSelectUserPassword(req, res, next) {
   next();
 }
 
-function redirectInsertVacancy(req, res, next) {
-  req.body.dataType = 'INSERT_VACANCY';
+function redirectUpsertVacancy(req, res, next) {
+  req.body.dataType = 'UPSERT_VACANCY';
   next();
 }
 
@@ -104,6 +115,11 @@ function redirectUpdateUser(req, res, next) {
   next();
 }
 
+function redirectUpdateOccupant(req, res, next) {
+  req.body.dataType = 'UPDATE_OCCUPANT';
+  next();
+}
+
 function redirectSelectVacancyInterest(req, res, next) {
   req.body.dataType = 'SELECT_VACANCY_INTEREST';
   next();
@@ -118,6 +134,17 @@ function redirectDeleteInterests(req, res, next) {
   req.body.dataType = 'DELETE_USER_INTERESTS';
   next();
 }
+
+function redirectDeleteVacancy(req, res, next) {
+  req.body.dataType = 'DELETE_VACANCY';
+  next();
+}
+
+function redirectDeleteVacancyAreas(req, res, next) {
+  req.body.dataType = 'DELETE_VACANCY_AREAS';
+  next();
+}
+
 
 
 
@@ -171,7 +198,8 @@ async function exportVacancies(req, res) {
     const vacanciesMap = new Map()
     rows.forEach(row => {
       if (vacanciesMap.has(row.vacancy_id)) {
-        vacanciesMap.get(row.vacancy_id).areas.push(row.area_name)
+        if (row.area_name)
+          vacanciesMap.get(row.vacancy_id).areas.push(row.area_name)
       } else {
         vacanciesMap.set(row.vacancy_id, {
           "vacancy_id": row.vacancy_id,
@@ -180,7 +208,7 @@ async function exportVacancies(req, res) {
           "name": row.name,
           "description": row.description,
           "type": row.type,
-          "areas": [row.area_name],
+          "areas": row.area_name ? [row.area_name] : [],
           "total_payment": row.total_payment
         })
       }
@@ -297,7 +325,9 @@ async function insertData(req, res) {
       insertParams = INSERT_PARAMS['INSERT_VACANCY_AREAS']
       req.body.parameters.vacancy_id = queryResult.rows[0].vacancy_id
       query = insertParams.insertQuery(req.body.parameters)
-      queryResult = await authPool.query(query);
+      if (req.body.areas.length > 0) {
+        queryResult = await authPool.query(query);
+      }
     }
 
     res.status(201).json({ result: insertParams.printString });
@@ -342,13 +372,16 @@ module.exports = {
   redirectSelectVacancies,
   redirectSelectAreas,
   redirectSelectUserPassword,
-  redirectInsertVacancy,
+  redirectUpsertVacancy,
   redirectInsertVacancyInterest,
   redirectInsertUserInterest,
   redirectUpdateUser,
+  redirectUpdateOccupant,
   redirectSelectVacancyInterest,
   redirectSelectUsers,
   redirectDeleteInterests,
+  redirectDeleteVacancy,
+  redirectDeleteVacancyAreas,
   exportData,
   exportVacancies,
   exportVacanciesInterest,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AreasService } from 'src/app/services/areas.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { VacanciesService } from 'src/app/services/vacancies.service';
 import { TsUtils } from 'src/app/util/TsUtils'
 
@@ -11,17 +12,16 @@ import { TsUtils } from 'src/app/util/TsUtils'
 })
 export class VacanciesInsertionComponent implements OnInit {
   public form: FormGroup = this.fb.group({
-    registration_number: this.fb.control('', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(8), Validators.minLength(8)]),
     name: this.fb.control('', [Validators.required]),
     description: this.fb.control('', [Validators.required]),
     type: this.fb.control('', [Validators.required]),
     total_payment: this.fb.control('', Validators.pattern("^[0-9]*$")),
     areas: this.fb.array([], TsUtils.atLeastOne(Validators.requiredTrue)),
   });
-  // TODO: make dynamic
   public areaOptions: string[] = []
 
-  constructor(private vacanciesService: VacanciesService, private fb: FormBuilder, public areasService: AreasService) { }
+  constructor(private vacanciesService: VacanciesService, private authService: AuthService,
+    private fb: FormBuilder, public areasService: AreasService) { }
 
   ngOnInit(): void {
 
@@ -51,7 +51,7 @@ export class VacanciesInsertionComponent implements OnInit {
           selectedAreas.push(this.areaOptions[index])
         }
       })
-      await this.vacanciesService.saveVacancy(this.form.get('registration_number').value, this.form.get('name').value, this.form.get('type').value, this.form.get('description').value, selectedAreas, this.form.get('total_payment').value)
+      await this.vacanciesService.saveVacancy(this.authService.getCurrentUser().registration_number, this.form.get('name').value, this.form.get('type').value, this.form.get('description').value, selectedAreas, this.form.get('total_payment').value)
       this.resetForm()
     } catch (err) {
       console.error('Error saving data: ', err)
