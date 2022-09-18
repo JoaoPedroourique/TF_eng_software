@@ -17,4 +17,8 @@ export class AppComponent {
   public isTeacher() {
     return this.authService.getCurrentUser() && this.authService.getCurrentUser().is_teacher
   }
+
+  public logout() {
+    location.reload()
+  }
 }

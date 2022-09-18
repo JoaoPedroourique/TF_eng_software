@@ -12,6 +12,9 @@
         <li class="row" routerLinkActive="active" *ngIf="isTeacher()">
           <a routerLink="vacancies-insertion" class="w3-bar-item w3-button options">Registrar</a>
         </li>
+        <li (click)="logout()" class="row" style="cursor:pointer; position: fixed; bottom: 25px;">
+          <a class="w3-bar-item w3-button options">Sair</a>
+        </li>
       </ul>
 
     </div>
